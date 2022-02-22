@@ -2,6 +2,7 @@ import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CountryInfo, WeatherResponse } from '../../model/model';
+import FetchCountry from '../fetch/fetchCountry';
 
 const Country = () => {
     const apiKey ="f2475ac6db433e8c8a282083b81fef6d"
@@ -10,44 +11,39 @@ const Country = () => {
         country : string;
     }
 
-    const {country} : ID  = useParams();
+    const {country}  = useParams<ID>();
     const [info, setInfo] = useState<CountryInfo[]>([]);
     const [weather, setWeather] = useState<WeatherResponse>()
 
     useEffect(()=> {
-        fetch(`https://restcountries.com/v3.1/name/${country}`)
-        .then(res => res.json())
-        .then(data => {
-            console.log(data)
-            setInfo(data)
-        })
+     
+        fetchAllCountry();
     },[])
 
-    const getWeather =(countryName : string)=> {
-        fetch(`http://api.weatherstack.com/current?access_key=${apiKey}&query=${countryName}`)
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-            setWeather(data)
-        })
+    const fetchAllCountry = async () => {
+        const res = await FetchCountry.getCountry(country);
+        // console.log(res.data)
+        setInfo(res.data);
+    }
+
+    const getWeather = async (countryName : string)=> {
+        const res = await FetchCountry.fetchWeather(countryName);
+        setWeather(res.data);
 
     }
 
-    console.log(info,'infoo')
-
-   
 
     return (
-        <div>
-            <p> i am the new {country}</p>
+        <div data-testid='country'>
+            {/* <p> i am the new {country}</p> */}
           
             <div style={{textAlign:'center'}}>
             {
-                info.map(ele => <div>
-                    <p>{ele.population}</p>
-                    <p>{ele.latlng[0]}</p>
-                    <p>{ele.latlng[1]}</p>
-                    <p>{ele.capital[0]}</p>
+                info.map(ele => <div key={ele.latlng[0] + ele.latlng[1]}>
+                    <p>population :{ele.population}</p>
+                    <p>Lat:{ele.latlng[0]}</p>
+                    <p>Long:{ele.latlng[1]}</p>
+                    <p>Capital :{ele.capital[0]}</p>
                     <img src={ele.flags?.png} alt="" />
 
                 </div>)
@@ -62,17 +58,17 @@ const Country = () => {
            
             <div style={{textAlign:'center'}}>
                 {
-                    weather ? (
+                    weather && (
                         <div>
                             <div>
                                 <img src={weather.current.weather_icons[0]} alt="" />
                             </div>
-                            <p>{weather.current.temperature}</p>
-                            <p>{weather.current.wind_speed}</p>
-                            <p>{weather.current.precip}</p>
+                            <p>Temprature :{weather.current.temperature}</p>
+                            <p>Wind Speed :{weather.current.wind_speed}</p>
+                            <p>Precip :{weather.current.precip}</p>
                             
                         </div>
-                    ) : <p>i am now</p>
+                    ) 
 
                 }
             </div>

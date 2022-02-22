@@ -5,11 +5,11 @@ import { useHistory } from 'react-router-dom';
 const Home = () => {
     const [country, setCountry] = useState<string>('');
     const history =useHistory()
-    useEffect(()=> {
-        console.log(country,'ppppppppppp')
-    },[country])
+    // useEffect(()=> {
+    //     console.log(country,'ppppppppppp')
+    // },[country])
     return (
-        <div>
+        <div data-testid='home'>
             <Typography sx={{textAlign:'center'}} variant="h5" component="h2">
              Wellcome to Search your country
             </Typography>

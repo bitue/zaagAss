@@ -5,7 +5,7 @@ import Home from './components/Home/Home';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" data-testid='app-test'>
       <BrowserRouter>
         <Switch>
           <Route exact path='/'>
