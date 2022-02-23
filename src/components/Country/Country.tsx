@@ -27,7 +27,7 @@ const Country = () => {
 
     const getWeather = async (countryName : string)=> {
         const res = await FetchCountry.fetchWeather(countryName);
-        console.log(res)
+        // console.log(res)
         setWeather(res.data);
 
     }
@@ -58,7 +58,7 @@ const Country = () => {
            
             <div style={{textAlign:'center'}}>
                 {
-                    weather ? (
+                    weather && (
                         <div>
                             <div>
                                 <img src={weather.current.weather_icons[0]} alt="" />
@@ -68,7 +68,7 @@ const Country = () => {
                             <p>Precip :{weather.current.precip}</p>
                             
                         </div>
-                    )  : null
+                    )  
 
                 }
             </div>
